@@ -1,0 +1,10 @@
+FROM jenkins/jenkins:latest
+RUN sudo a2enmod proxy proxy_http ssl
+RUN DocumentRoot /var/www/app/public
+RUN SSLProxyEngine On    ProxyRequests off
+RUN ProxyPass :8080 http://35.202.180.139
+RUN ProxyPassReverse :8080 https://35.202.180.139
+RUN $_SERVER['REQUEST_URI'] = ':8080' . $_SERVER['REQUEST_URI'];
+RUN $_SERVER['SCRIPT_NAME'] = ':8080' . $_SERVER['SCRIPT_NAME'];
+RUN $_SERVER['PHP_SELF'] = ':8080' . $_SERVER['PHP_SELF'];
+RUN UPDATE wp_options SET option_value = 'https://35.202.180.139' WHERE option_name IN( 'siteurl', 'home' );
